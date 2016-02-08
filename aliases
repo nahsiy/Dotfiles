@@ -33,4 +33,3 @@ alias lzp="unzip -l"
 alias llz="tar --lzma -tf"
 alias ulz="tar --lzma -xf"
 alias lz="tar --lzma -cvf"
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
