@@ -33,3 +33,14 @@ alias lzp="unzip -l"
 alias llz="tar --lzma -tf"
 alias ulz="tar --lzma -xf"
 alias lz="tar --lzma -cvf"
+
+# Logs
+alias syslog="tail -f /var/log/syslog | ccze -A"
+alias modifies="find . -mtime -1 -print | more"
+
+# systemctl
+alias reload="systemctl reload"
+alias status="systemctl status"
+alias restart="systemctl restart"
+alias start="systemctl start"
+alias enabled="systemctl enable"
