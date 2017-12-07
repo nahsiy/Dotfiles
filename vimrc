@@ -24,7 +24,4 @@ set showcmd
 set ruler
 " Ignore la casse lors de recherche
 set ignorecase
-" Conserve l'indentation courante sur les nouvelles lignes 
-set autoindent
-" Indentation "intelligents"
-set smartindent
+
