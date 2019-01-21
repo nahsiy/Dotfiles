@@ -1,19 +1,16 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
-export TERM="xterm-256color"
 
 # Path to your oh-my-zsh installation.
-  export ZSH=/home/yishan/.oh-my-zsh
+  export ZSH="/home/yishan/.oh-my-zsh"
 
-# Set name of the theme to load. Optionally, if you set this to "random"
-# it'll load a random theme each time that oh-my-zsh is loaded.
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-# ZSH_THEME="powerline"
+#ZSH_THEME="robbyrussell"
 ZSH_THEME="powerlevel9k/powerlevel9k"
-DISABLE_UPDATE_PROMPT=true
-
-# POWERLEVEL9K_MODE='awesome-patched'
-POWERLEVEL9K_MODE='nerdfont-complete'
+POWERLEVEL9K_MODE="nerdfont-complete"
 POWERLEVEL9K_LEFT_SEGMENT_SEPARATOR=$'\uE0C0'
 POWERLEVEL9K_RIGHT_SEGMENT_SEPARATOR=$'\uE0C2'
 POWERLEVEL9K_STATUS_VERBOSE=true
@@ -22,22 +19,27 @@ POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status time background_jobs load virtualenv)
 POWERLEVEL9K_SHORTEN_DIR_LENGTH=2
 POWERLEVEL9K_OS_ICON_BACKGROUND="blue"
 POWERLEVEL9K_OS_ICON_FOREGROUND="black"
-POWERLEVEL9K_DIR_HOME_BACKGROUND="white"
-POWERLEVEL9K_DIR_HOME_FOREGROUND="black"
+POWERLEVEL9K_DIR_HOME_BACKGROUND="black"
+POWERLEVEL9K_DIR_HOME_FOREGROUND="white"
 POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND="blue"
 POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND="black"
 POWERLEVEL9K_DIR_DEFAULT_BACKGROUND="green"
 POWERLEVEL9K_DIR_DEFAULT_FOREGROUND="black"
 if [ "$USER" != "root" ]; then
-	export DEFAULT_USER="$USER"
+export DEFAULT_USER="$USER"
 fi
 
+# Set list of themes to pick from when loading at random
+# Setting this variable when ZSH_THEME=random will cause zsh to load
+# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
+# If set to an empty array, this variable will have no effect.
+# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
 
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
+# Uncomment the following line to use hyphen-insensitive completion.
+# Case-sensitive completion must be off. _ and - will be interchangeable.
 # HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
@@ -58,25 +60,30 @@ fi
 # Uncomment the following line to display red dots whilst waiting for completion.
 # COMPLETION_WAITING_DOTS="true"
 
-# Uncommen tthe following line if you want to disable marking untracked files
-export LANG=fr_FR.UTF-8
+# Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# You can set one of the optional three formats:
+# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# or set a custom format using the strftime function format specifications,
+# see 'man strftime' for details.
 # HIST_STAMPS="mm/dd/yyyy"
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Which plugins would you like to load?
+# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(
+  git
+)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -85,7 +92,7 @@ source $ZSH/oh-my-zsh.sh
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
-export LANG=fr_FR.UTF-8
+# export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
@@ -106,27 +113,40 @@ export LANG=fr_FR.UTF-8
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
 ##############
-# Mes Aliases #
-###############
+## Mes Aliases #
+################
 
-# Apt-get
-alias maj='sudo apt-get update && sudo apt-get upgrade && sudo apt-get dist-upgrade'
-alias up='sudo apt-get update'
-alias install='sudo apt-get install'
-alias autoremove='sudo apt-get autoremove'
-alias autoclean='sudo apt-get autoclean'
-alias cache='sudo apt-cache search'
+## Apt-get
+alias maj='sudo apt update && sudo apt upgrade && sudo apt dist-upgrade'
+alias up='sudo apt update'
+alias install='sudo apt install'
+alias autoremove='sudo apt autoremove'
+alias autoclean='sudo apt autoclean'
+alias cache='sudo apt search'
 
-# Moves
+## Moves
 alias cddl="cd ~/Téléchargements"
 alias cl='clear'
 alias ll='ls -la'
+alias ls="ls --color=auto"
 
-# Network
+## Personnalisation
+alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias diff='colordiff'
+
+
+## Network
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias ports='netstat -tulanp'
+alias header='curl -I'
 
-# Archives
+
+## Archives
 alias ntar="tar -cf"
 alias gz="tar -zcvf"
 alias bz="tar -jcvf"
@@ -143,19 +163,19 @@ alias llz="tar --lzma -tf"
 alias ulz="tar --lzma -xf"
 alias lz="tar --lzma -cvf"
 
-#logs
+##logs
 alias syslog="tail -f /var/log/syslog | ccze -A"
+alias h='history'
 
-# Files search
-## fichiers modifiés dans les 48h
+
+## Files search
+### fichiers modifiés dans les 48h
 alias modifies="find . -mtime -1 -print | more"
 
-# SSH
-alias sshdedie="ssh yishan@163.172.221.136 -p 22000"
+## Serveur
+alias sshdedie="ssh *************"
 
-
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
-	        source /etc/profile.d/vte.sh
-		fi
+## Safety
+alias mv='mv -i'
+alias cp='cp -i'
+alias ln='ln -i'
