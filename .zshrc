@@ -1,22 +1,9 @@
-typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
-
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-
-# Load Antigen
-source "/home/cmassieu/antigen.zsh"
-
-# Load Antigen configurations
-antigen init ~/.antigenrc
-
-
-#if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
-#        source /etc/profile.d/vte.sh
-#fi
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -30,6 +17,25 @@ export ZSH="$HOME/.oh-my-zsh"
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 #ZSH_THEME="robbyrussell"
 ZSH_THEME="powerlevel10k/powerlevel10k"
+
+
+#Load Antigen
+source "/home/cmassieu/antigen.zsh"
+
+#=== Plugins ===
+
+antigen bundle git
+antigen bundle pip
+antigen bundle command-not-found
+
+antigen bundle zsh-users/zsh-completions
+antigen bundle zsh-users/zsh-autosuggestions
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle zsh-users/zsh-history-substring-search
+antigen bundle lukechilds/zsh-nvm
+
+#Load Antigen configurations
+antigen init ~/.antigenrc
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -108,19 +114,6 @@ source $ZSH/oh-my-zsh.sh
 # else
 #   export EDITOR='mvim'
 # fi
-#
-### Plugins ###
-
-antigen bundle git
-antigen bundle pip
-antigen bundle command-not-found
-
-antigen bundle zsh-users/zsh-completions
-antigen bundle zsh-users/zsh-autosuggestions
-antigen bundle zsh-users/zsh-syntax-highlighting
-antigen bundle zsh-users/zsh-history-substring-search
-antigen bundle lukechilds/zsh-nvm
-antigen bundle ael-code/zsh-colored-man-page
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -130,31 +123,23 @@ antigen bundle ael-code/zsh-colored-man-page
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 #
-# Example aliases
-### Aliases ###
-# Apt-get
+# === Aliases ===
+#= Apt-get
 alias maj='sudo apt-get update && sudo apt-get upgrade && sudo apt-get dist-upgrade'
 alias up='sudo apt-get update'
 alias install='sudo apt-get install'
 alias autoremove='sudo apt-get autoremove'
 alias autoclean='sudo apt-get autoclean'
 alias cache='sudo apt-cache search'
-alias vi='nvim'
-alias exa='exa -abghHliS'
-alias cat='batcat'
 
-### SSH ### # Deprecated / the conf is now on file config folder ssh
+# Utilisez fzf pour la recherche dans l'historique
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+bindkey '^R' fzf-history-widget
 
-### BANNER /  MOTD ###
-alias neo='neofetch --config off --bold off --colors 4 1 8 8 8 7'
-
-# Fuck
-eval $(thefuck --alias fuck)
-
-
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
+# === Antigen Apply ===
+antigen apply
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-### Antigen Apply ###
-antigen apply
-
