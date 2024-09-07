@@ -4,7 +4,14 @@
 
 [source,shell]
 ----
-brew install wezterm vim ccze git tmux zsh zsh-autosuggestions zsh-completions zsh-syntax-highlighting eza
+brew install wezterm vim ccze git tmux zsh zsh-autosuggestions zsh-completions zsh-syntax-highlighting eza fzf
+----
+
+== fonts
+
+[source,shell]
+----
+brew install fontconfig font-fira-code-nerd-font font-go-mono-nerd-font font-hack-nerd-font font-jetbrains-mono-nerd-font font-meslo-lg-nerd-font font-monaspace-nerd-font font-noto-sans-symbols-2 font-sf-mono-nerd-font-ligaturized
 ----
 
 == files location
