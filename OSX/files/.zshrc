@@ -49,7 +49,7 @@ source <(fzf --zsh)
 # Charger les plugins installés via Homebrew
 source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $ZSH/plugins/history-substring-search/history-substring-search.zsh
+source $ZSH/plugins/history-substring-search/zsh-history-substring-search.zsh
 
 # Alias pour 'thefuck', un correcteur de commandes
 eval $(thefuck --alias)
