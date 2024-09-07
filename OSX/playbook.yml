@@ -66,3 +66,9 @@
         src: files/.vimrc
         dest: ~/.vimrc
         mode: 0644
+
+    - name: Copy zsh config
+      copy:
+        src: files/.zshrc
+        dest: ~/.zshrc
+        mode: 0644
