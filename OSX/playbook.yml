@@ -101,6 +101,7 @@
         src: files/.tmux.conf
         dest: ~/.tmux.conf
         mode: 0644
+        force: true
 
     # Créer une session tmux dédiée à l'installation des plugins TPM
     - name: Install TPM plugins
@@ -112,6 +113,7 @@
         path: ~/.config
         state: directory
         mode: '0755'
+        force: true
 
     # Copier les configurations
     - name: Copy WezTerm config
@@ -119,21 +121,25 @@
         src: files/.wezterm.lua
         dest: ~/.wezterm.lua
         mode: 0644
+        force: true
 
     - name: Copy Starship config
       copy:
         src: files/starship.toml
         dest: ~/.config/starship.toml
         mode: 0644
+        force: true
 
     - name: Copy Vim config
       copy:
         src: files/.vimrc
         dest: ~/.vimrc
         mode: 0644
+        force: true
 
     - name: Copy Zsh config
       copy:
         src: files/.zshrc
         dest: ~/.zshrc
         mode: 0644
+        force: true
