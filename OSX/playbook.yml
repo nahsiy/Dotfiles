@@ -13,7 +13,6 @@
       loop:
         - wezterm
         - vim
-        - ccze
         - git
         - tmux
         - zsh
