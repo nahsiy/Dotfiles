@@ -48,6 +48,12 @@
         dest: ~/.tmux.conf
         mode: 0644
 
+    - name: Ensure ~/.config directory exists
+      file:
+        path: ~/.config
+        state: directory
+        mode: '0755'
+
     - name: Copy Starship config
       copy:
         src: files/starship.toml
