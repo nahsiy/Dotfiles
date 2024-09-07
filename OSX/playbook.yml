@@ -84,7 +84,6 @@
 
     # Corriger les permissions sur /private/tmp
     - name: Fix permissions on /private/tmp
-      become: true
       file:
         path: /private/tmp
         mode: '1777'
