@@ -39,9 +39,6 @@ alias ls="eza --icons=always"  # Utilise eza pour lister les fichiers avec des i
 # ---- Zoxide (meilleur cd) ----
 eval "$(zoxide init zsh)"  # Zoxide, un remplacement rapide pour cd
 
-# Alias pour utiliser la version installée par Homebrew de TMUX
-alias tmux='/opt/homebrew/bin/tmux'
-
 # Intégration de fzf pour la complétion
 source <(fzf --zsh)
 
