@@ -1,0 +1,30 @@
+= My Terminal configuration on OSX
+
+== Packages
+
+[source,shell]
+----
+brew install wezterm vim ccze git tmux zsh zsh-autosuggestions zsh-completions zsh-syntax-highlighting eza
+----
+
+== files location
+
+=== Wezterm
+
+~/.config/.wezterm.lua
+
+=== Tmux
+
+~/.tmux.conf
+
+=== Starship
+
+~/.starship.toml
+
+=== Vim
+
+~/.vimrc
+
+== Result
+
+image:show.png[]
