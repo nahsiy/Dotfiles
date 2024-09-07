@@ -1,11 +1,16 @@
 #!/bin/bash
 
-#!/bin/bash
+# Demander les droits sudo dès le début
+sudo -v
 
 # Installation de Homebrew si non installé
 if ! command -v brew &> /dev/null; then
     echo "Homebrew non détecté, installation en cours..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+    # Ajouter Homebrew au PATH
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/$(whoami)/.zprofile
+    eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
 # Installation d'Ansible si non installé
@@ -23,4 +28,3 @@ echo "Exécution du playbook Ansible..."
 ansible-playbook -i localhost, -c local playbook.yml
 
 echo "Configuration terminée. Redémarre ton terminal pour appliquer les changements."
-echo "Redémarre ton terminal ou ta session pour appliquer les changements."
