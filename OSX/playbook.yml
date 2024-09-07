@@ -82,13 +82,13 @@
         repo: https://github.com/zsh-users/zsh-history-substring-search.git
         dest: "{{ ansible_env.HOME }}/.oh-my-zsh/plugins/history-substring-search"
 
-    # # Corriger les permissions sur /private/tmp
-    # - name: Fix permissions on /private/tmp
-    #   become: true
-    #   file:
-    #     path: /private/tmp
-    #     mode: '1777'
-    #     state: directory
+    # Corriger les permissions sur /private/tmp
+    - name: Fix permissions on /private/tmp
+      become: true
+      file:
+        path: /private/tmp
+        mode: '1777'
+        state: directory
 
     # Installer TPM (Tmux Plugin Manager)
     - name: Clone TPM (Tmux Plugin Manager)
