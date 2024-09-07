@@ -6,6 +6,12 @@
     - community.general
 
   tasks:
+    # Ajouter le tap des polices Homebrew
+    - name: Add homebrew/cask-fonts tap
+      community.general.homebrew_tap:
+        name: homebrew/cask-fonts
+        state: present
+
     # Installer les packages Homebrew nécessaires
     - name: Install required brew packages
       community.general.homebrew:
@@ -40,7 +46,7 @@
         - font-meslo-lg-nerd-font
         - font-monaspace-nerd-font
         - font-noto-sans-symbols-2
-        - font-sf-mono-nerd-font  # Ajout de cette police
+        - font-sf-mono-nerd-font-ligaturized  # Correct version of SF Mono Nerd Font
 
     # Installer Oh My Zsh si non installé
     - name: Install Oh My Zsh if not installed
