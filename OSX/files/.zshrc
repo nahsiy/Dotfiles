@@ -13,7 +13,6 @@ plugins=(
     ansible
     tmux
     extract
-    history-substring-search
     sudo
     z
 )
