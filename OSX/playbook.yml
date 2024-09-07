@@ -1,4 +1,6 @@
+---
 - hosts: localhost
+  become: true
   vars:
     ansible_python_interpreter: /opt/homebrew/bin/python3
   collections:
@@ -25,13 +27,35 @@
         - zoxide
         - thefuck
 
-    # Supprimer l'ancien répertoire du plugin s'il existe
+    # Installer Oh My Zsh si non installé
+    - name: Install Oh My Zsh if not installed
+      shell: |
+        if [ ! -d "$HOME/.oh-my-zsh" ]; then
+          sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+        fi
+
+    # Supprimer l'ancien répertoire du plugin history-substring-search s'il existe
     - name: Remove existing history-substring-search directory if it exists
       file:
         path: "{{ ansible_env.HOME }}/.oh-my-zsh/plugins/history-substring-search"
         state: absent
 
-    # Cloner le plugin history-substring-search
+    # Cloner les plugins Oh My Zsh nécessaires
+    - name: Clone zsh-syntax-highlighting plugin
+      git:
+        repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
+        dest: "{{ ansible_env.HOME }}/.oh-my-zsh/plugins/zsh-syntax-highlighting"
+
+    - name: Clone zsh-autosuggestions plugin
+      git:
+        repo: https://github.com/zsh-users/zsh-autosuggestions.git
+        dest: "{{ ansible_env.HOME }}/.oh-my-zsh/plugins/zsh-autosuggestions"
+
+    - name: Clone zsh-completions plugin
+      git:
+        repo: https://github.com/zsh-users/zsh-completions.git
+        dest: "{{ ansible_env.HOME }}/.oh-my-zsh/plugins/zsh-completions"
+
     - name: Clone history-substring-search plugin
       git:
         repo: https://github.com/zsh-users/zsh-history-substring-search.git
