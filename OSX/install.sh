@@ -30,3 +30,4 @@ echo "Exécution du playbook Ansible..."
 ansible-playbook -i localhost, -c local playbook.yml
 
 echo "Configuration terminée avec succès."
+echo "Redémarre ton terminal ou ta session pour appliquer les changements."
