@@ -21,6 +21,7 @@
         - zsh-syntax-highlighting
         - eza
         - fzf
+        - starship
 
     - name: Install required fonts
       community.general.homebrew:
