@@ -38,24 +38,24 @@
 
     - name: Copy WezTerm config
       copy:
-        src: files/wezterm.lua
-        dest: ~/.config/wezterm.lua
+        src: files/.wezterm.lua
+        dest: ~/.wezterm.lua
         mode: 0644
 
     - name: Copy Tmux config
       copy:
-        src: files/tmux.conf
+        src: files/.tmux.conf
         dest: ~/.tmux.conf
         mode: 0644
 
     - name: Copy Starship config
       copy:
         src: files/starship.toml
-        dest: ~/.starship.toml
+        dest: ~/.config/starship.toml
         mode: 0644
 
     - name: Copy Vim config
       copy:
-        src: files/vimrc
+        src: files/.vimrc
         dest: ~/.vimrc
         mode: 0644
