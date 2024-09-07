@@ -96,7 +96,7 @@
 
     # Installer les plugins TPM
     - name: Install TPM plugins
-      command: /bin/bash -lc 'tmux start-server && tmux new-session -d && sleep 1 && tmux run-shell ~/.tmux/plugins/tpm/bin/install_plugins && tmux kill-session'
+      command: /bin/bash -lc 'tmux start-server && tmux new-session -d && sleep 3 && tmux run-shell ~/.tmux/plugins/tpm/bin/install_plugins && tmux kill-session'
 
     # Assurer que le répertoire ~/.config existe
     - name: Ensure ~/.config directory exists
