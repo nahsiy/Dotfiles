@@ -81,6 +81,23 @@
         repo: https://github.com/zsh-users/zsh-history-substring-search.git
         dest: "{{ ansible_env.HOME }}/.oh-my-zsh/plugins/history-substring-search"
 
+    # Installer TPM (Tmux Plugin Manager)
+    - name: Clone TPM (Tmux Plugin Manager)
+      git:
+        repo: https://github.com/tmux-plugins/tpm
+        dest: ~/.tmux/plugins/tpm
+
+    # Copier les configurations de Tmux
+    - name: Copy Tmux config
+      copy:
+        src: files/.tmux.conf
+        dest: ~/.tmux.conf
+        mode: 0644
+
+    # Installer les plugins TPM
+    - name: Install TPM plugins
+      command: /bin/bash -lc 'tmux new-session -d && sleep 1 && tmux run-shell ~/.tmux/plugins/tpm/bin/install_plugins && tmux kill-session'
+
     # Assurer que le répertoire ~/.config existe
     - name: Ensure ~/.config directory exists
       file:
@@ -93,12 +110,6 @@
       copy:
         src: files/.wezterm.lua
         dest: ~/.wezterm.lua
-        mode: 0644
-
-    - name: Copy Tmux config
-      copy:
-        src: files/.tmux.conf
-        dest: ~/.tmux.conf
         mode: 0644
 
     - name: Copy Starship config
