@@ -25,7 +25,7 @@ ansible-galaxy collection install community.general
 
 # Exécution du playbook Ansible
 echo "Exécution du playbook Ansible..."
-ansible-playbook -i localhost, -c local playbook.yml
+ansible-playbook -i localhost, -c local playbook.yml --ask-become-pass
 
 # Vérifier le succès
 if [ $? -eq 0 ]; then
