@@ -13,6 +13,8 @@
         path: /private/tmp
         mode: '1777'
         state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
 
     # Supprimer l'ancien socket de tmux s'il existe
     - name: Remove tmux socket if it exists
