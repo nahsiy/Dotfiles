@@ -37,40 +37,40 @@
         name: shaunsingh/sfmono-nerd-font-ligaturized
         state: present
 
-    # Installer les packages Homebrew nécessaires
-    - name: Install required brew packages
-      community.general.homebrew:
-        name: "{{ item }}"
-        state: present
-      loop:
-        - wezterm
-        - vim
-        - git
-        - tmux
-        - zsh
-        - zsh-autosuggestions
-        - zsh-completions
-        - zsh-syntax-highlighting
-        - eza
-        - fzf
-        - starship
-        - zoxide
-        - thefuck
+    # # Installer les packages Homebrew nécessaires
+    # - name: Install required brew packages
+    #   community.general.homebrew:
+    #     name: "{{ item }}"
+    #     state: present
+    #   loop:
+    #     - wezterm
+    #     - vim
+    #     - git
+    #     - tmux
+    #     - zsh
+    #     - zsh-autosuggestions
+    #     - zsh-completions
+    #     - zsh-syntax-highlighting
+    #     - eza
+    #     - fzf
+    #     - starship
+    #     - zoxide
+    #     - thefuck
 
-    # Installer les polices requises
-    - name: Install required fonts
-      community.general.homebrew:
-        name: "{{ item }}"
-        state: present
-      loop:
-        - font-fira-code-nerd-font
-        - font-go-mono-nerd-font
-        - font-hack-nerd-font
-        - font-jetbrains-mono-nerd-font
-        - font-meslo-lg-nerd-font
-        - font-monaspace-nerd-font
-        - font-noto-sans-symbols-2
-        - font-sf-mono-nerd-font-ligaturized
+    # # Installer les polices requises
+    # - name: Install required fonts
+    #   community.general.homebrew:
+    #     name: "{{ item }}"
+    #     state: present
+    #   loop:
+    #     - font-fira-code-nerd-font
+    #     - font-go-mono-nerd-font
+    #     - font-hack-nerd-font
+    #     - font-jetbrains-mono-nerd-font
+    #     - font-meslo-lg-nerd-font
+    #     - font-monaspace-nerd-font
+    #     - font-noto-sans-symbols-2
+    #     - font-sf-mono-nerd-font-ligaturized
 
     # Installer TPM (Tmux Plugin Manager)
     - name: Clone TPM (Tmux Plugin Manager)
@@ -86,17 +86,16 @@
         mode: 0644
         force: true
 
-    # Vérifier que la session tpm_install est créée
+    # Vérifier que la session tpm_install existe
     - name: Check if tmux session tpm_install is running
-      command: /opt/homebrew/bin/tmux ls | grep tpm_install
-      register: tmux_session
-      failed_when: tmux_session.rc != 0
+      command: /opt/homebrew/bin/tmux ls
+      register: tmux_sessions
       ignore_errors: yes
 
-    # Installer les plugins TPM si la session est active
+    # Installer les plugins TPM si la session tpm_install est active
     - name: Install TPM plugins
       command: /bin/bash -lc '/opt/homebrew/bin/tmux new-session -d -s tpm_install && sleep 5 && /opt/homebrew/bin/tmux run-shell ~/.tmux/plugins/tpm/bin/install_plugins && /opt/homebrew/bin/tmux kill-session -t tpm_install'
-      when: tmux_session.rc == 0
+      when: "'tpm_install' not in tmux_sessions.stdout"
 
     # Assurer que le répertoire ~/.config existe
     - name: Ensure ~/.config directory exists
