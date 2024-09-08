@@ -24,7 +24,7 @@
       ignore_errors: true
 
     # Démarrer une session tmux pour forcer la création du socket
-    - name: Start a tmux session to create the socket
+    - name: Start a dummy tmux session to create the socket
       command: /opt/homebrew/bin/tmux new-session -d -s dummy_session
 
     # Démarrer le serveur tmux manuellement (si nécessaire)
@@ -72,40 +72,6 @@
         - font-noto-sans-symbols-2
         - font-sf-mono-nerd-font-ligaturized
 
-    # Installer Oh My Zsh si non installé
-    - name: Install Oh My Zsh if not installed
-      shell: |
-        if [ ! -d "$HOME/.oh-my-zsh" ]; then
-          sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-        fi
-
-    # Supprimer l'ancien répertoire du plugin history-substring-search s'il existe
-    - name: Remove existing history-substring-search directory if it exists
-      file:
-        path: "{{ ansible_env.HOME }}/.oh-my-zsh/plugins/history-substring-search"
-        state: absent
-
-    # Cloner les plugins Oh My Zsh nécessaires
-    - name: Clone zsh-syntax-highlighting plugin
-      git:
-        repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
-        dest: "{{ ansible_env.HOME }}/.oh-my-zsh/plugins/zsh-syntax-highlighting"
-
-    - name: Clone zsh-autosuggestions plugin
-      git:
-        repo: https://github.com/zsh-users/zsh-autosuggestions.git
-        dest: "{{ ansible_env.HOME }}/.oh-my-zsh/plugins/zsh-autosuggestions"
-
-    - name: Clone zsh-completions plugin
-      git:
-        repo: https://github.com/zsh-users/zsh-completions.git
-        dest: "{{ ansible_env.HOME }}/.oh-my-zsh/plugins/zsh-completions"
-
-    - name: Clone history-substring-search plugin
-      git:
-        repo: https://github.com/zsh-users/zsh-history-substring-search.git
-        dest: "{{ ansible_env.HOME }}/.oh-my-zsh/plugins/history-substring-search"
-
     # Installer TPM (Tmux Plugin Manager)
     - name: Clone TPM (Tmux Plugin Manager)
       git:
@@ -120,9 +86,17 @@
         mode: 0644
         force: true
 
-    # Installer les plugins TPM
+    # Vérifier que la session tpm_install est créée
+    - name: Check if tmux session tpm_install is running
+      command: /opt/homebrew/bin/tmux ls | grep tpm_install
+      register: tmux_session
+      failed_when: tmux_session.rc != 0
+      ignore_errors: yes
+
+    # Installer les plugins TPM si la session est active
     - name: Install TPM plugins
-      command: /bin/bash -lc '/opt/homebrew/bin/tmux new-session -d -s tpm_install && sleep 3 && /opt/homebrew/bin/tmux run-shell ~/.tmux/plugins/tpm/bin/install_plugins && /opt/homebrew/bin/tmux kill-session -t tpm_install'
+      command: /bin/bash -lc '/opt/homebrew/bin/tmux new-session -d -s tpm_install && sleep 5 && /opt/homebrew/bin/tmux run-shell ~/.tmux/plugins/tpm/bin/install_plugins && /opt/homebrew/bin/tmux kill-session -t tpm_install'
+      when: tmux_session.rc == 0
 
     # Assurer que le répertoire ~/.config existe
     - name: Ensure ~/.config directory exists
@@ -131,7 +105,7 @@
         state: directory
         mode: '0755'
 
-    # Copier les configurations
+    # Copier les configurations de WezTerm
     - name: Copy WezTerm config
       copy:
         src: files/.wezterm.lua
@@ -139,6 +113,7 @@
         mode: 0644
         force: true
 
+    # Copier la configuration de Starship
     - name: Copy Starship config
       copy:
         src: files/starship.toml
@@ -146,16 +121,10 @@
         mode: 0644
         force: true
 
+    # Copier la configuration de Vim
     - name: Copy Vim config
       copy:
         src: files/.vimrc
         dest: ~/.vimrc
-        mode: 0644
-        force: true
-
-    - name: Copy Zsh config
-      copy:
-        src: files/.zshrc
-        dest: ~/.zshrc
         mode: 0644
         force: true
