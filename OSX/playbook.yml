@@ -6,30 +6,6 @@
     - community.general
 
   tasks:
-    # Corriger les permissions sur /private/tmp
-    - name: Fix permissions on /private/tmp
-      become: true
-      file:
-        path: /private/tmp
-        mode: '1777'
-        state: directory
-        owner: "{{ ansible_user_id }}"
-        group: "wheel"
-
-    # Supprimer l'ancien socket de tmux s'il existe
-    - name: Remove tmux socket if it exists
-      file:
-        path: /private/tmp/tmux-501
-        state: absent
-      ignore_errors: true
-
-    # Démarrer une session tmux pour forcer la création du socket
-    - name: Start a dummy tmux session to create the socket
-      command: /opt/homebrew/bin/tmux new-session -d -s dummy_session
-
-    # Démarrer le serveur tmux manuellement (si nécessaire)
-    - name: Start tmux server manually
-      command: /opt/homebrew/bin/tmux start-server
 
     # Ajouter le tap pour SF Mono Nerd Font Ligaturized
     - name: Add homebrew tap for SFMono Nerd Font Ligaturized
@@ -71,6 +47,31 @@
         - font-monaspace-nerd-font
         - font-noto-sans-symbols-2
         - font-sf-mono-nerd-font-ligaturized
+
+    # Corriger les permissions sur /private/tmp
+    - name: Fix permissions on /private/tmp
+      become: true
+      file:
+        path: /private/tmp
+        mode: '1777'
+        state: directory
+        owner: "{{ ansible_user_id }}"
+        group: "wheel"
+
+    # Supprimer l'ancien socket de tmux s'il existe
+    - name: Remove tmux socket if it exists
+      file:
+        path: /private/tmp/tmux-501
+        state: absent
+      ignore_errors: true
+
+    # Démarrer une session tmux pour forcer la création du socket
+    - name: Start a dummy tmux session to create the socket
+      command: /opt/homebrew/bin/tmux new-session -d -s dummy_session
+
+    # Démarrer le serveur tmux manuellement (si nécessaire)
+    - name: Start tmux server manually
+      command: /opt/homebrew/bin/tmux start-server
 
     # Installer TPM (Tmux Plugin Manager)
     - name: Clone TPM (Tmux Plugin Manager)
