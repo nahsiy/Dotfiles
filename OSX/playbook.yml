@@ -14,7 +14,7 @@
         mode: '1777'
         state: directory
         owner: "{{ ansible_user_id }}"
-        group: "{{ ansible_user_id }}"
+        group: "wheel"
 
     # Supprimer l'ancien socket de tmux s'il existe
     - name: Remove tmux socket if it exists
