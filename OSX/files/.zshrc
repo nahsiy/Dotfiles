@@ -1,24 +1,3 @@
-# Chemin de Oh My Zsh
-export ZSH="$HOME/.oh-my-zsh"
-
-# Plugins Oh My Zsh
-plugins=(
-    git
-    zsh-syntax-highlighting
-    zsh-autosuggestions
-    zsh-completions
-    docker
-    kubectl
-    terraform
-    ansible
-    extract
-    sudo
-    z
-)
-
-# Charger Oh My Zsh et les plugins
-source $ZSH/oh-my-zsh.sh
-
 # Configuration de l'historique
 HISTFILE=$HOME/.zhistory
 SAVEHIST=1000
@@ -41,10 +20,9 @@ eval "$(zoxide init zsh)"  # Zoxide, un remplacement rapide pour cd
 # Intégration de fzf pour la complétion
 source <(fzf --zsh)
 
-# Charger les plugins installés via Homebrew
+# Charger les plugins installés via Homebrew (sans Oh My Zsh)
 source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $ZSH/plugins/history-substring-search/zsh-history-substring-search.plugin.zsh
 
 # Alias pour 'thefuck', un correcteur de commandes
 eval $(thefuck --alias)
@@ -55,13 +33,9 @@ export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/b
 # Fonction pour renommer la fenêtre TMUX avec le hostname distant lors d'une connexion SSH
 ssh() {
     if [ -n "$TMUX" ]; then
-        # Désactiver le renommage automatique
         tmux set-window-option automatic-rename off 1>/dev/null
-        # Renommer la fenêtre TMUX avec le nom de la machine distante
         tmux rename-window "ssh: $(echo $@ | awk '{print $NF}' | sed 's/.*@//')"
-        # Exécuter la commande SSH
         command ssh "$@"
-        # Réactiver le renommage automatique après la connexion
         tmux set-window-option automatic-rename on 1>/dev/null
     else
         command ssh "$@"
@@ -74,20 +48,17 @@ function update_tmux_window_name {
         tmux rename-window "$(basename $PWD)"
     fi
 }
-
-# Ajouter la fonction de mise à jour du nom de la fenêtre lors du changement de répertoire
 chpwd_functions+=(update_tmux_window_name)
 
 # Configuration pour Node Version Manager (NVM)
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # Charge nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # Charge nvm bash_completion
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
-# Add somes paths
+# Ajout de quelques chemins supplémentaires
 export PATH="$PATH:/Users/cmassieu/.local/bin"
 export PATH="/opt/homebrew/opt/gawk/libexec/gnubin:$PATH"
 export PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH"
 
-
-# Initialiser le prompt Starship
+# Initialiser le prompt Starship (Starship prend la gestion complète du prompt)
 eval "$(starship init zsh)"
