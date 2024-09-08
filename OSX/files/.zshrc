@@ -11,7 +11,6 @@ plugins=(
     kubectl
     terraform
     ansible
-    tmux
     extract
     sudo
     z
