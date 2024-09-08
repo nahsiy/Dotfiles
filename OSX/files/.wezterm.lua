@@ -1,32 +1,32 @@
--- Charger l'API WezTerm
+-- Load the WezTerm API
 local wezterm = require("wezterm")
 
--- Créer la configuration
+-- Create the configuration
 local config = wezterm.config_builder()
 
--- Définir le schéma de couleurs
+-- Set the color scheme
 config.color_scheme = "Monokai Pro (Gogh)"
 
--- Activer les ligatures si supportées par la police
+-- Enable ligatures if supported by the font
 -- config.harfbuzz_features = {"calt=1", "clig=1", "liga=1"}
 config.harfbuzz_features = {}
 
 config.font = wezterm.font_with_fallback({
 	"Liga SFMono Nerd Font",
-	"Noto Sans Symbols 2",  -- Ajoute Noto Sans Symbols pour les chiffres digitaux
+	"Noto Sans Symbols 2",  -- Add Noto Sans Symbols for digital figures
 	"Symbols Nerd Font Mono"
   })
   config.font_size = 13
   config.font_size = 18
 
--- Configurer l'épaisseur et le style du curseur
+-- Configure cursor thickness and style
 config.cursor_thickness = 1.0
 config.default_cursor_style = "BlinkingBar"
 
--- Désactiver la barre d'onglets
+-- Disable the tab bar
 config.enable_tab_bar = false
 
--- Définir les raccourcis clavier
+-- Define keyboard shortcuts
 config.keys = {
 	{ key = "h", mods = "CMD", action = wezterm.action.HideApplication },
 	{ key = "=", mods = "CTRL|SHIFT", action = "IncreaseFontSize" },
@@ -39,36 +39,36 @@ config.keys = {
 	{ key = "LeftArrow", mods = "CTRL", action = wezterm.action.SendKey{ key="b", mods="ALT" } },
 	{ key = "RightArrow", mods = "CTRL", action = wezterm.action.SendKey{ key="f", mods="ALT" } },
 
--- Raccourcis pour diviser l'écran
+-- Shortcuts for splitting the screen
     { key = "v", mods = "CMD|SHIFT", action = wezterm.action{SplitHorizontal={domain="CurrentPaneDomain"}} },
     { key = "h", mods = "CMD|SHIFT", action = wezterm.action{SplitVertical={domain="CurrentPaneDomain"}} },
 }
 
--- Configurer l'apparence de la fenêtre
+-- Configure window appearance
 config.window_decorations = "TITLE | RESIZE"
 config.window_background_opacity = 0.8
 config.macos_window_background_blur = 15
 
--- Définir la taille et la position initiales de la fenêtre
+-- Set initial window size and position
 config.initial_cols = 150
 config.initial_rows = 50
 
--- Mettre à jour le PATH pour inclure le chemin vers tmux
+-- Update the PATH to include the path to tmux
 config.set_environment_variables = {
-	PATH = "/usr/local/bin:/opt/homebrew/bin:" .. os.getenv("PATH"),  -- Ajoute les chemins où tmux est installé
+	PATH = "/usr/local/bin:/opt/homebrew/bin:" .. os.getenv("PATH"),  -- Add paths where tmux is installed
   }
 
--- Lancer automatiquement tmux lors de l'ouverture de WezTerm
+-- Automatically launch tmux when WezTerm starts
 wezterm.on("gui-startup", function(cmd)
 	local tab, pane, window = wezterm.mux.spawn_window({
-	  -- Lancer Tmux dans une session nommée "default" (ou rejoindre la session si elle existe)
+	  -- Launch Tmux in a session named "default" (or join the session if it exists)
 	  args = {"tmux", "new-session", "-A", "-s", "default"}
 	})
   
-	-- Centrer la fenêtre à gauche avec un peu de marge
-	window:gui_window():set_position(60, 100)  -- Décale légèrement la fenêtre vers l'intérieur (x=60, y=100)
-	window:gui_window():set_inner_size(1600, 1200)  -- Largeur plus petite (1600px), Hauteur réduite (1200px)
+	-- Center the window slightly to the left with some margin
+	window:gui_window():set_position(60, 100)  -- Slightly offset the window (x=60, y=100)
+	window:gui_window():set_inner_size(1600, 1200)  -- Smaller width (1600px), reduced height (1200px)
   end)
 
--- Retourner la configuration finale
+-- Return the final configuration
 return config

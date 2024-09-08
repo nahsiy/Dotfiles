@@ -1,37 +1,38 @@
 = My Terminal configuration on OSX
 
-== Packages
+== Install
+
+To install the terminal configuration, follow these steps:
+
+* Open the Terminal app on macOS.
+* Clone the repository by running the following command:
 
 [source,shell]
 ----
-brew install wezterm vim git tmux zsh zsh-autosuggestions zsh-completions zsh-syntax-highlighting eza fzf
+cd /tmp
+git clone https://github.com/nahsiy/Dotfiles.git
 ----
 
-== fonts
+* Navigate to the cloned repository directory:
 
 [source,shell]
 ----
-brew install fontconfig font-fira-code-nerd-font font-go-mono-nerd-font font-hack-nerd-font font-jetbrains-mono-nerd-font font-meslo-lg-nerd-font font-monaspace-nerd-font font-noto-sans-symbols-2
+cd Dotfiles/OSX/
 ----
 
-== files location
+* Run the installation script:
 
-=== Wezterm
-
-~/.config/.wezterm.lua
-
-=== Tmux
-
-~/.tmux.conf
-
-=== Starship
-
-~/.starship.toml
-
-=== Vim
-
-~/.vimrc
+[source,shell]
+----
+bash install.sh
+----
 
 == Result
 
 image:show.png[]
+
+== Troubleshooting
+
+Here are some solutions to common issues:
+
+* [Task Install TPM plugins on error] - Restart the install.

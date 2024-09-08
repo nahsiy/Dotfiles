@@ -1,36 +1,36 @@
-# Configuration de l'historique
+# History configuration
 HISTFILE=$HOME/.zhistory
 SAVEHIST=1000
 HISTSIZE=999
-setopt share_history           # Partage l'historique entre les sessions
-setopt hist_expire_dups_first  # Supprime les doublons les plus anciens en premier
-setopt hist_ignore_dups        # Ignore les doublons successifs dans l'historique
-setopt hist_verify             # Affiche la commande avant de l'exécuter pour validation
+setopt share_history           # Share history between sessions
+setopt hist_expire_dups_first  # Remove older duplicates first
+setopt hist_ignore_dups        # Ignore consecutive duplicates in history
+setopt hist_verify             # Show command before execution for verification
 
-# Raccourcis pour naviguer dans l'historique avec les flèches
+# Shortcuts to navigate history with arrow keys
 bindkey '^[[A' history-search-backward
 bindkey '^[[B' history-search-forward
 
 # Aliases
-alias ls="eza --icons=always"  # Utilise eza pour lister les fichiers avec des icônes
+alias ls="eza --icons=always"  # Use eza to list files with icons
 
-# ---- Zoxide (meilleur cd) ----
-eval "$(zoxide init zsh)"  # Zoxide, un remplacement rapide pour cd
+# ---- Zoxide (better cd command) ----
+eval "$(zoxide init zsh)"  # Zoxide, a fast replacement for cd
 
-# Intégration de fzf pour la complétion
+# Fzf integration for completion
 source <(fzf --zsh)
 
-# Charger les plugins installés via Homebrew (sans Oh My Zsh)
+# Load plugins installed via Homebrew (without Oh My Zsh)
 source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-# Alias pour 'thefuck', un correcteur de commandes
+# Alias for 'thefuck', a command corrector
 eval $(thefuck --alias)
 
-# Ajouter Visual Studio Code à PATH
+# Add Visual Studio Code to PATH
 export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 
-# Fonction pour renommer la fenêtre TMUX avec le hostname distant lors d'une connexion SSH
+# Function to rename the TMUX window with the remote hostname during an SSH connection
 ssh() {
     if [ -n "$TMUX" ]; then
         tmux set-window-option automatic-rename off 1>/dev/null
@@ -42,7 +42,7 @@ ssh() {
     fi
 }
 
-# Fonction pour mettre à jour le nom de la fenêtre TMUX avec le nom du répertoire courant
+# Function to update the TMUX window name with the current directory name
 function update_tmux_window_name {
     if [ -n "$TMUX" ]; then
         tmux rename-window "$(basename $PWD)"
@@ -50,15 +50,15 @@ function update_tmux_window_name {
 }
 chpwd_functions+=(update_tmux_window_name)
 
-# Configuration pour Node Version Manager (NVM)
+# Configuration for Node Version Manager (NVM)
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
-# Ajout de quelques chemins supplémentaires
+# Add some additional paths
 export PATH="$PATH:/Users/cmassieu/.local/bin"
 export PATH="/opt/homebrew/opt/gawk/libexec/gnubin:$PATH"
 export PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH"
 
-# Initialiser le prompt Starship (Starship prend la gestion complète du prompt)
+# Initialize the Starship prompt (Starship fully manages the prompt)
 eval "$(starship init zsh)"

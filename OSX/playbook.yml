@@ -7,13 +7,13 @@
 
   tasks:
 
-    # Ajouter le tap pour SF Mono Nerd Font Ligaturized
+    # Add the tap for SF Mono Nerd Font Ligaturized
     - name: Add homebrew tap for SFMono Nerd Font Ligaturized
       community.general.homebrew_tap:
         name: shaunsingh/sfmono-nerd-font-ligaturized
         state: present
 
-    # Installer les packages Homebrew nécessaires
+    # Install the required Homebrew packages
     - name: Install required brew packages
       community.general.homebrew:
         name: "{{ item }}"
@@ -33,7 +33,7 @@
         - zoxide
         - thefuck
 
-    # Installer les polices requises
+    # Install the required fonts
     - name: Install required fonts
       community.general.homebrew:
         name: "{{ item }}"
@@ -48,7 +48,7 @@
         - font-noto-sans-symbols-2
         - font-sf-mono-nerd-font-ligaturized
 
-    # Corriger les permissions sur /private/tmp
+    # Fix permissions on /private/tmp
     - name: Fix permissions on /private/tmp
       become: true
       file:
@@ -58,28 +58,28 @@
         owner: "{{ ansible_user_id }}"
         group: "wheel"
 
-    # Supprimer l'ancien socket de tmux s'il existe
+    # Remove the old tmux socket if it exists
     - name: Remove tmux socket if it exists
       file:
         path: /private/tmp/tmux-501
         state: absent
       ignore_errors: true
 
-    # Démarrer une session tmux pour forcer la création du socket
+    # Start a tmux session to force socket creation
     - name: Start a dummy tmux session to create the socket
       command: /opt/homebrew/bin/tmux new-session -d -s dummy_session
 
-    # Démarrer le serveur tmux manuellement (si nécessaire)
+    # Start tmux server manually (if needed)
     - name: Start tmux server manually
       command: /opt/homebrew/bin/tmux start-server
 
-    # Installer TPM (Tmux Plugin Manager)
+    # Install TPM (Tmux Plugin Manager)
     - name: Clone TPM (Tmux Plugin Manager)
       git:
         repo: https://github.com/tmux-plugins/tpm
         dest: ~/.tmux/plugins/tpm
 
-    # Copier les configurations de Tmux
+    # Copy Tmux configuration
     - name: Copy Tmux config
       copy:
         src: files/.tmux.conf
@@ -87,25 +87,25 @@
         mode: 0644
         force: true
 
-    # Vérifier que la session tpm_install existe
+    # Check if the tpm_install session is running
     - name: Check if tmux session tpm_install is running
       command: /opt/homebrew/bin/tmux ls
       register: tmux_sessions
       ignore_errors: yes
 
-    # Installer les plugins TPM si la session tpm_install est active
+    # Install TPM plugins if the tpm_install session is active
     - name: Install TPM plugins
       command: /bin/bash -lc '/opt/homebrew/bin/tmux new-session -d -s tpm_install && sleep 5 && /opt/homebrew/bin/tmux run-shell ~/.tmux/plugins/tpm/bin/install_plugins && /opt/homebrew/bin/tmux kill-session -t tpm_install'
       when: "'tpm_install' not in tmux_sessions.stdout"
 
-    # Assurer que le répertoire ~/.config existe
+    # Ensure the ~/.config directory exists
     - name: Ensure ~/.config directory exists
       file:
         path: ~/.config
         state: directory
         mode: '0755'
 
-    # Copier les configurations de WezTerm
+    # Copy WezTerm configuration
     - name: Copy WezTerm config
       copy:
         src: files/.wezterm.lua
@@ -113,7 +113,7 @@
         mode: 0644
         force: true
 
-    # Copier la configuration de Starship
+    # Copy Starship configuration
     - name: Copy Starship config
       copy:
         src: files/starship.toml
@@ -121,7 +121,7 @@
         mode: 0644
         force: true
 
-    # Copier la configuration de Vim
+    # Copy Vim configuration
     - name: Copy Vim config
       copy:
         src: files/.vimrc
@@ -129,7 +129,7 @@
         mode: 0644
         force: true
 
-    # Copier la configuration de zshrc
+    # Copy zshrc configuration
     - name: Copy zshrc config
       copy:
         src: files/.zshrc

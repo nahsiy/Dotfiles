@@ -1,57 +1,57 @@
-" .vimrc de base
+" Basic .vimrc
 
-" Activer la numérotation des lignes
+" Enable line numbering
 set number
 
-" Activer la coloration syntaxique
+" Enable syntax highlighting
 syntax on
 
-" Définir le type de fichier automatiquement
+" Automatically detect file type
 filetype on
 filetype plugin on
 filetype indent on
 
-" Activer les indentations automatiques
+" Enable automatic indentations
 set autoindent
 set smartindent
-set tabstop=4       " Afficher les tabulations comme 4 espaces
-set shiftwidth=4    " Utiliser 4 espaces pour le niveau d'indentation
-set expandtab       " Convertir les tabs en espaces
+set tabstop=4       " Display tabs as 4 spaces
+set shiftwidth=4    " Use 4 spaces for each indentation level
+set expandtab       " Convert tabs to spaces
 
-" Activer le mode recherche incrémentale
+" Enable incremental search
 set incsearch
-set hlsearch        " Surligner les résultats de la recherche
+set hlsearch        " Highlight search results
 
-" Activer le mode visuel pour sélectionner des blocs de texte
-set mouse=a         " Activer la souris dans tous les modes
+" Enable visual mode for selecting blocks of text
+set mouse=a         " Enable mouse in all modes
 
-" Activer la gestion des fichiers par buffer
-set hidden          " Permet de changer de buffer sans sauvegarder
+" Enable buffer file management
+set hidden          " Allow switching buffers without saving
 
-" Activer la barre d'état
+" Enable the status line
 set laststatus=2
 
-" Améliorer les performances avec des fichiers volumineux
-set lazyredraw      " Ne pas redessiner pendant l'exécution des macros
-set ttyfast         " Plus rapide pour les terminaux rapides
+" Improve performance for large files
+set lazyredraw      " Don't redraw while running macros
+set ttyfast         " Faster output for fast terminals
 
-" Activer le copier-coller avec le presse-papiers système
+" Enable system clipboard integration for copy-paste
 set clipboard=unnamedplus
 
-" Afficher l'indentation avec des points
+" Show indentation with visible characters
 set list
 set listchars=tab:»·,trail:·,extends:>,precedes:<
 
-" Désactiver les sons d'alerte
+" Disable alert sounds
 set noerrorbells
 set visualbell
 set t_vb=
 
-" Sauvegarder automatiquement les modifications toutes les 100 frappes
+" Auto-save changes every 100 keystrokes
 set updatetime=100
 
-" Mettre a jour l ecran après 300ms d inactivite
+" Update the screen after 300ms of inactivity
 set timeoutlen=300
 
-" fzf
+" fzf integration
 set rtp+=/opt/homebrew/opt/fzf
