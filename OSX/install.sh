@@ -1,35 +1,35 @@
 #!/bin/bash
 
-# Demander les droits sudo dès le début
+# Request sudo privileges at the beginning
 sudo -v
 
-# Installation de Homebrew si non installé
+# Install Homebrew if not already installed
 if ! command -v brew &> /dev/null; then
-    echo "Homebrew non détecté, installation en cours..."
+    echo "Homebrew not detected, installing..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-    # Ajouter Homebrew au PATH
+    # Add Homebrew to PATH
     echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/$(whoami)/.zprofile
     eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-# Installation d'Ansible si non installé
+# Install Ansible if not already installed
 if ! command -v ansible &> /dev/null; then
-    echo "Ansible non détecté, installation via Homebrew..."
+    echo "Ansible not detected, installing via Homebrew..."
     brew install ansible
 fi
 
-# Installation de la collection Ansible homebrew
-echo "Installation de la collection Ansible homebrew..."
+# Install the Ansible homebrew collection
+echo "Installing Ansible homebrew collection..."
 ansible-galaxy collection install community.general
 
-# Exécution du playbook Ansible
-echo "Exécution du playbook Ansible..."
+# Run the Ansible playbook
+echo "Running Ansible playbook..."
 ansible-playbook -i localhost, -c local playbook.yml --ask-become-pass
 
-# Vérifier le succès
+# Check for success
 if [ $? -eq 0 ]; then
-    echo "Configuration terminée. Redémarre ton terminal pour appliquer les changements."
+    echo "Configuration complete. Restart your terminal to apply the changes."
 else
-    echo "Erreur : Exécution du playbook Ansible a échoué."
+    echo "Error: Ansible playbook execution failed."
 fi
