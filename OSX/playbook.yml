@@ -127,3 +127,11 @@
         dest: ~/.vimrc
         mode: 0644
         force: true
+
+    # Copier la configuration de zshrc
+    - name: Copy Vim config
+      copy:
+        src: files/.zshrc
+        dest: ~/.zshrc
+        mode: 0644
+        force: true
