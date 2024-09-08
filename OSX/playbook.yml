@@ -37,40 +37,40 @@
         name: shaunsingh/sfmono-nerd-font-ligaturized
         state: present
 
-    # # Installer les packages Homebrew nécessaires
-    # - name: Install required brew packages
-    #   community.general.homebrew:
-    #     name: "{{ item }}"
-    #     state: present
-    #   loop:
-    #     - wezterm
-    #     - vim
-    #     - git
-    #     - tmux
-    #     - zsh
-    #     - zsh-autosuggestions
-    #     - zsh-completions
-    #     - zsh-syntax-highlighting
-    #     - eza
-    #     - fzf
-    #     - starship
-    #     - zoxide
-    #     - thefuck
+    # Installer les packages Homebrew nécessaires
+    - name: Install required brew packages
+      community.general.homebrew:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - wezterm
+        - vim
+        - git
+        - tmux
+        - zsh
+        - zsh-autosuggestions
+        - zsh-completions
+        - zsh-syntax-highlighting
+        - eza
+        - fzf
+        - starship
+        - zoxide
+        - thefuck
 
-    # # Installer les polices requises
-    # - name: Install required fonts
-    #   community.general.homebrew:
-    #     name: "{{ item }}"
-    #     state: present
-    #   loop:
-    #     - font-fira-code-nerd-font
-    #     - font-go-mono-nerd-font
-    #     - font-hack-nerd-font
-    #     - font-jetbrains-mono-nerd-font
-    #     - font-meslo-lg-nerd-font
-    #     - font-monaspace-nerd-font
-    #     - font-noto-sans-symbols-2
-    #     - font-sf-mono-nerd-font-ligaturized
+    # Installer les polices requises
+    - name: Install required fonts
+      community.general.homebrew:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - font-fira-code-nerd-font
+        - font-go-mono-nerd-font
+        - font-hack-nerd-font
+        - font-jetbrains-mono-nerd-font
+        - font-meslo-lg-nerd-font
+        - font-monaspace-nerd-font
+        - font-noto-sans-symbols-2
+        - font-sf-mono-nerd-font-ligaturized
 
     # Installer TPM (Tmux Plugin Manager)
     - name: Clone TPM (Tmux Plugin Manager)
@@ -129,7 +129,7 @@
         force: true
 
     # Copier la configuration de zshrc
-    - name: Copy Vim config
+    - name: Copy zshrc config
       copy:
         src: files/.zshrc
         dest: ~/.zshrc
