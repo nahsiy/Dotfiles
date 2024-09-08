@@ -23,7 +23,11 @@
         state: absent
       ignore_errors: true
 
-    # Démarrer le serveur tmux manuellement
+    # Démarrer une session tmux pour forcer la création du socket
+    - name: Start a tmux session to create the socket
+      command: /opt/homebrew/bin/tmux new-session -d -s dummy_session
+
+    # Démarrer le serveur tmux manuellement (si nécessaire)
     - name: Start tmux server manually
       command: /opt/homebrew/bin/tmux start-server
 
@@ -116,7 +120,7 @@
         mode: 0644
         force: true
 
-    # Créer une session tmux dédiée à l'installation des plugins TPM
+    # Installer les plugins TPM
     - name: Install TPM plugins
       command: /bin/bash -lc '/opt/homebrew/bin/tmux new-session -d -s tpm_install && sleep 3 && /opt/homebrew/bin/tmux run-shell ~/.tmux/plugins/tpm/bin/install_plugins && /opt/homebrew/bin/tmux kill-session -t tpm_install'
 
