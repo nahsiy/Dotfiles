@@ -1,138 +1,97 @@
 ---
-- hosts: localhost
+- name: Installer les dotfiles de l'utilisateur courant
+  hosts: localhost
+  connection: local
+  gather_facts: false
   vars:
-    ansible_python_interpreter: /opt/homebrew/bin/python3
-  collections:
-    - community.general
-
+    dotfiles_target_dir: "{{ lookup('ansible.builtin.env', 'HOME') }}"
+    dotfiles_entries:
+      - {src: ".zshrc", dest: ".zshrc"}
+      - {src: ".tmux.conf", dest: ".tmux.conf"}
+      - {src: ".vimrc", dest: ".vimrc"}
+      - {src: ".wezterm.lua", dest: ".wezterm.lua"}
+      - {src: "starship.toml", dest: ".config/starship.toml"}
+    dotfiles_directories:
+      - "{{ dotfiles_target_dir }}"
+      - "{{ dotfiles_target_dir }}/.config"
+      - "{{ dotfiles_target_dir }}/.config/nvim"
   tasks:
+    - name: Vérifier la destination
+      ansible.builtin.assert:
+        that:
+          - dotfiles_target_dir is string
+          - dotfiles_target_dir.startswith('/')
+          - dotfiles_target_dir != '/'
+          - "'/../' not in dotfiles_target_dir"
+          - "not dotfiles_target_dir.endswith('/..')"
+        fail_msg: La destination doit être un chemin absolu explicite, hors racine.
 
-    # Add the tap for SF Mono Nerd Font Ligaturized
-    - name: Add homebrew tap for SFMono Nerd Font Ligaturized
-      community.general.homebrew_tap:
-        name: shaunsingh/sfmono-nerd-font-ligaturized
-        state: present
+    - name: Examiner les dossiers sans suivre les liens
+      ansible.builtin.stat:
+        path: "{{ item }}"
+        follow: false
+      loop: "{{ dotfiles_directories }}"
+      register: dotfiles_dir_stats
 
-    # Install the required Homebrew packages
-    - name: Install required brew packages
-      community.general.homebrew:
-        name: "{{ item }}"
-        state: present
-      loop:
-        - wezterm
-        - vim
-        - git
-        - tmux
-        - zsh
-        - zsh-autosuggestions
-        - zsh-completions
-        - zsh-syntax-highlighting
-        - eza
-        - fzf
-        - starship
-        - zoxide
-        - thefuck
+    - name: Refuser un dossier cible qui est un lien symbolique
+      ansible.builtin.assert:
+        that:
+          - not (item.stat.islnk | default(false))
+          - not item.stat.exists or (item.stat.isdir | default(false))
+        fail_msg: "Destination non standard : {{ item.item }}. Adaptez manuellement votre installation."
+      loop: "{{ dotfiles_dir_stats.results }}"
+      loop_control:
+        label: "{{ item.item }}"
 
-    # Install the required fonts
-    - name: Install required fonts
-      community.general.homebrew:
-        name: "{{ item }}"
-        state: present
-      loop:
-        - font-fira-code-nerd-font
-        - font-go-mono-nerd-font
-        - font-hack-nerd-font
-        - font-jetbrains-mono-nerd-font
-        - font-meslo-lg-nerd-font
-        - font-monaspace-nerd-font
-        - font-noto-sans-symbols-2
-        - font-sf-mono-nerd-font-ligaturized
-
-    # Fix permissions on /private/tmp
-    - name: Fix permissions on /private/tmp
-      become: true
-      file:
-        path: /private/tmp
-        mode: '1777'
+    - name: Créer seulement les dossiers absents
+      ansible.builtin.file:
+        path: "{{ item.item }}"
         state: directory
-        owner: "{{ ansible_user_id }}"
-        group: "wheel"
+        mode: '0700'
+      loop: "{{ dotfiles_dir_stats.results }}"
+      loop_control:
+        label: "{{ item.item }}"
+      when: not item.stat.exists
 
-    # Remove the old tmux socket if it exists
-    - name: Remove tmux socket if it exists
-      file:
-        path: /private/tmp/tmux-501
-        state: absent
-      ignore_errors: true
+    - name: Examiner les fichiers existants sans suivre les liens
+      ansible.builtin.stat:
+        path: "{{ dotfiles_target_dir }}/{{ item }}"
+        follow: false
+      loop: "{{ (dotfiles_entries | map(attribute='dest') | list) + ['.config/nvim/init.vim'] }}"
+      register: dotfiles_file_stats
 
-    # Start a tmux session to force socket creation
-    - name: Start a dummy tmux session to create the socket
-      command: /opt/homebrew/bin/tmux new-session -d -s dummy_session
+    - name: Préserver les fichiers déjà gérés par liens symboliques
+      ansible.builtin.assert:
+        that:
+          - not (item.stat.islnk | default(false))
+          - not item.stat.exists or (item.stat.isreg | default(false))
+        fail_msg: "Fichier non standard : {{ item.item }}. Conservez votre gestionnaire de dotfiles existant."
+      loop: "{{ dotfiles_file_stats.results }}"
+      loop_control:
+        label: "{{ item.item }}"
 
-    # Start tmux server manually (if needed)
-    - name: Start tmux server manually
-      command: /opt/homebrew/bin/tmux start-server
+    - name: Copier les configurations avec sauvegarde
+      ansible.builtin.copy:
+        src: "files/{{ item.src }}"
+        dest: "{{ dotfiles_target_dir }}/{{ item.dest }}"
+        mode: '0600'
+        backup: true
+        follow: false
+      loop: "{{ dotfiles_entries }}"
+      register: dotfiles_copies
 
-    # Install TPM (Tmux Plugin Manager)
-    - name: Clone TPM (Tmux Plugin Manager)
-      git:
-        repo: https://github.com/tmux-plugins/tpm
-        dest: ~/.tmux/plugins/tpm
+    - name: Installer Neovim sans dépendance de plugin
+      ansible.builtin.copy:
+        src: ../init.vim
+        dest: "{{ dotfiles_target_dir }}/.config/nvim/init.vim"
+        mode: '0600'
+        backup: true
+        follow: false
 
-    # Copy Tmux configuration
-    - name: Copy Tmux config
-      copy:
-        src: files/.tmux.conf
-        dest: ~/.tmux.conf
-        mode: 0644
-        force: true
-
-    # Check if the tpm_install session is running
-    - name: Check if tmux session tpm_install is running
-      command: /opt/homebrew/bin/tmux ls
-      register: tmux_sessions
-      ignore_errors: yes
-
-    # Install TPM plugins if the tpm_install session is active
-    - name: Install TPM plugins
-      command: /bin/bash -lc '/opt/homebrew/bin/tmux new-session -d -s tpm_install && sleep 5 && /opt/homebrew/bin/tmux run-shell ~/.tmux/plugins/tpm/bin/install_plugins && /opt/homebrew/bin/tmux kill-session -t tpm_install'
-      when: "'tpm_install' not in tmux_sessions.stdout"
-
-    # Ensure the ~/.config directory exists
-    - name: Ensure ~/.config directory exists
-      file:
-        path: ~/.config
-        state: directory
-        mode: '0755'
-
-    # Copy WezTerm configuration
-    - name: Copy WezTerm config
-      copy:
-        src: files/.wezterm.lua
-        dest: ~/.wezterm.lua
-        mode: 0644
-        force: true
-
-    # Copy Starship configuration
-    - name: Copy Starship config
-      copy:
-        src: files/starship.toml
-        dest: ~/.config/starship.toml
-        mode: 0644
-        force: true
-
-    # Copy Vim configuration
-    - name: Copy Vim config
-      copy:
-        src: files/.vimrc
-        dest: ~/.vimrc
-        mode: 0644
-        force: true
-
-    # Copy zshrc configuration
-    - name: Copy zshrc config
-      copy:
-        src: files/.zshrc
-        dest: ~/.zshrc
-        mode: 0644
-        force: true
+    - name: Indiquer les sauvegardes créées
+      ansible.builtin.debug:
+        msg: "Sauvegarde : {{ item.backup_file }}"
+      loop: "{{ dotfiles_copies.results }}"
+      loop_control:
+        label: "{{ item.item.dest }}"
+      when: item.backup_file is defined

@@ -1,38 +1,12 @@
-= My Terminal configuration on OSX
+= Configuration terminal macOS
 
-== Install
-
-To install the terminal configuration, follow these steps:
-
-* Open the Terminal app on macOS.
-* Clone the repository by running the following command:
+Le guide d'installation est dans le link:../README.md[README principal].
 
 [source,shell]
 ----
-cd /tmp
-git clone https://github.com/nahsiy/Dotfiles.git
+# Depuis la racine du dépôt : aperçu sans modifier les dotfiles
+bash OSX/install.sh --check
 ----
 
-* Navigate to the cloned repository directory:
-
-[source,shell]
-----
-cd Dotfiles/OSX/
-----
-
-* Run the installation script:
-
-[source,shell]
-----
-bash install.sh
-----
-
-== Result
-
-image:show.png[]
-
-== Troubleshooting
-
-Here are some solutions to common issues:
-
-* [Task Install TPM plugins on error] - Restart the install.
+Les paquets sont installés séparément. Le déploiement des fichiers ne demande
+ni privilèges sudo ni changement du shell de connexion.
